@@ -2,6 +2,7 @@ package telran.java51.account.service;
 
 import java.util.Optional;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 
@@ -31,6 +32,8 @@ public class AccountServiceImpl implements AccountService {
 		}
 
 		Account account = modelMapper.map(userRegisterDto, Account.class);
+		String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
+		account.setPassword(password ); 
 		account.addRole("USER");
 		account = accountRepository.save(account);
 		return modelMapper.map(account, UserDto.class);
