@@ -23,6 +23,8 @@ public interface AccountService {
 	
 	UserDto getUser(String user);
 	
+	void changePassword(String login, String newPassword);
+	
 	
 
 }

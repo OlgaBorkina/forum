@@ -81,16 +81,22 @@ public class AccountServiceImpl implements AccountService {
 		return modelMapper.map(account, RoleDto.class);
 	}
 
-	@Override
-	public void changePassword() {
-		// TODO Auto-generated method stub
-
+	public void changePassword(String login, String newPassword) {
+		Account account = accountRepository.findById(login).orElseThrow(AccountNotException::new);
+		account.setPassword(newPassword);
+		accountRepository.save(account);
 	}
 
 	@Override
 	public UserDto getUser(String user) {
 		Account account = accountRepository.findById(user).orElseThrow(AccountNotException::new);
 		return modelMapper.map(account, UserDto.class);
+	}
+
+	@Override
+	public void changePassword() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
