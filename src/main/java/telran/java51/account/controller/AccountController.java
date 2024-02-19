@@ -1,5 +1,7 @@
 package telran.java51.account.controller;
 
+import java.util.Base64;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +37,14 @@ public class AccountController  {
 	public UserDto userLogin() {
 		return accountService.userLogin();
 	}
-
+	@PostMapping("/login")
+	public UserDto login(@RequestHeader("Authorization") String token ) {
+		token = token.split(" ")[1];
+		String credentional = new String(Base64.getDecoder().decode(token));
+		return accountService.getUser(credentional.split(":")[0]);
+	}
+	
+	
 	@DeleteMapping("/user/{user}")
 	public UserDto deleteUser(@PathVariable String user) {
 		return accountService.deleteUser(user);
