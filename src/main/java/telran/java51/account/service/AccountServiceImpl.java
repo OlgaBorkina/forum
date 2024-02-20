@@ -26,17 +26,24 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public UserDto userRegister(UserRegisterDto userRegisterDto) {
 
-
-		if(accountRepository.existsById(userRegisterDto.getLogin())) {
+		if (accountRepository.existsById(userRegisterDto.getLogin())) {
 			throw new AlreadyExists();
 		}
 
 		Account account = modelMapper.map(userRegisterDto, Account.class);
 		String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
-		account.setPassword(password ); 
+		account.setPassword(password);
 		account.addRole("USER");
 		account = accountRepository.save(account);
 		return modelMapper.map(account, UserDto.class);
+	}
+
+	@Override
+	public void changePassword(String login, String newPassword) {
+		Account account = accountRepository.findById(login).orElseThrow(AccountNotException::new);
+		String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		account.setPassword(password);
+		accountRepository.save(account);
 	}
 
 	@Override
@@ -81,22 +88,10 @@ public class AccountServiceImpl implements AccountService {
 		return modelMapper.map(account, RoleDto.class);
 	}
 
-	public void changePassword(String login, String newPassword) {
-		Account account = accountRepository.findById(login).orElseThrow(AccountNotException::new);
-		account.setPassword(newPassword);
-		accountRepository.save(account);
-	}
-
 	@Override
 	public UserDto getUser(String user) {
 		Account account = accountRepository.findById(user).orElseThrow(AccountNotException::new);
 		return modelMapper.map(account, UserDto.class);
-	}
-
-	@Override
-	public void changePassword() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

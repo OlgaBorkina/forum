@@ -33,9 +33,8 @@ public class AccountController  {
 		return accountService.userRegister(userRegisterDto);
 	}
 	
-	@PostMapping("/")
+	@PostMapping("/login")
 	public UserDto login(Principal principal ) {
-		
 		return accountService.getUser(principal.getName());
 	}
 
@@ -64,13 +63,7 @@ public class AccountController  {
 		return accountService.deleteRole(user, role);
 	}
 
-	@PutMapping("/password")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void changePassword() {
-		accountService.changePassword();
-		
-	}
-
+	
 	@GetMapping("user/{user}")
 	public UserDto getUser(@PathVariable String user) {
 		return accountService.getUser(user);
