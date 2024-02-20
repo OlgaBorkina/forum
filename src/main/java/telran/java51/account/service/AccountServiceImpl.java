@@ -82,9 +82,11 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public void changePassword() {
-		// TODO Auto-generated method stub
-
+	public void changePassword(String login, String newPassword) {
+		Account account = accountRepository.findById(login).orElseThrow(AccountNotException::new);
+		String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		account.setPassword(password);
+		accountRepository.save(account);
 	}
 
 	@Override

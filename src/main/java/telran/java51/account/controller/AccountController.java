@@ -1,5 +1,6 @@
 package telran.java51.account.controller;
 
+import java.security.Principal;
 import java.util.Base64;
 
 import org.springframework.http.HttpStatus;
@@ -67,9 +68,8 @@ public class AccountController  {
 
 	@PutMapping("/password")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void changePassword() {
-		accountService.changePassword();
-		
+	public  void changePassword (Principal principal, @RequestHeader("X-Password") String newPassword ) {
+		accountService.changePassword(principal.getName(), newPassword);
 	}
 
 	@GetMapping("user/{user}")

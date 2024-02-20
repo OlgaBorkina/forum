@@ -19,7 +19,7 @@ public interface AccountService {
 	
 	RoleDto deleteRole(String user,String role);
 	
-	void changePassword();
+	void changePassword(String login, String newPassword);
 	
 	UserDto getUser(String user);
 	
