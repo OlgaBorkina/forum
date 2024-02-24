@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
+import telran.java51.security.filter.enums.Role;
+
 
 @Getter
 @EqualsAndHashCode(of = "login")
@@ -29,8 +31,6 @@ public class Account {
 	Set<String> roles  = new HashSet<>();
 	
 	
-	
-	
 	public Account(String login, String firstName, String lastName, Set<String> roles) {
 		this.login = login;
 		this.firstName = firstName;
@@ -40,10 +40,10 @@ public class Account {
 	}
 	
 	public boolean addRole(String role) {
-		return roles.add(role.toUpperCase());
+		return roles.add(role);
 	}
 	public boolean removeRole(String role) {
-		return roles.remove(role.toUpperCase());
+		return roles.remove(role);
 	}
 
 	public Account(String login, String firstName, String lastName, String password) {

@@ -19,6 +19,7 @@ import telran.java51.account.dao.AccountRepository;
 import telran.java51.account.model.Account;
 import telran.java51.post.dao.PostRepository;
 import telran.java51.post.model.Post;
+import telran.java51.security.filter.enums.Role;
 
 @Component
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class DeletePostFilter implements Filter {
 			Account accPricipal = accountRepository.findById(principal.getName()).get();
 			Post post = postRepository.findById(idPost).orElseThrow(RuntimeException::new);
 					if ( !(principal.getName().equals(post.getAuthor())
-					|| accPricipal.getRoles().contains("MODERATOR"))){
+					|| accPricipal.getRoles().contains(Role.MODERATOR))){
 				response.sendError(403);
 				return;
 			}

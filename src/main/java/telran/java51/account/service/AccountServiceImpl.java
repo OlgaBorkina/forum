@@ -16,6 +16,7 @@ import telran.java51.account.dto.UserRegisterDto;
 import telran.java51.account.dto.exception.AccountNotException;
 import telran.java51.account.dto.exception.AlreadyExists;
 import telran.java51.account.model.Account;
+import telran.java51.security.filter.enums.Role;
 
 @Controller
 @RequiredArgsConstructor
