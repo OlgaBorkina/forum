@@ -28,6 +28,9 @@ public class Account {
 	@Singular
 	Set<String> roles  = new HashSet<>();
 	
+	
+	
+	
 	public Account(String login, String firstName, String lastName, Set<String> roles) {
 		this.login = login;
 		this.firstName = firstName;
@@ -37,10 +40,17 @@ public class Account {
 	}
 	
 	public boolean addRole(String role) {
-		return roles.add(role);
+		return roles.add(role.toUpperCase());
 	}
 	public boolean removeRole(String role) {
-		return roles.remove(role);
+		return roles.remove(role.toUpperCase());
+	}
+
+	public Account(String login, String firstName, String lastName, String password) {
+		this.login = login;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
 	}
 	
 	

@@ -38,10 +38,6 @@ public class AccountController  {
 		return accountService.getUser(principal.getName());
 	}
 
-	@PostMapping("/post")
-	public UserDto userLogin() {
-		return accountService.userLogin();
-	}
 
 	@DeleteMapping("/user/{user}")
 	public UserDto deleteUser(@PathVariable String user) {

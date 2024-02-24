@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import telran.java51.account.model.Account;
 
 @Controller
 @RequiredArgsConstructor
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService, CommandLineRunner {
 
 	final AccountRepository accountRepository;
 	final ModelMapper modelMapper;
@@ -46,11 +47,7 @@ public class AccountServiceImpl implements AccountService {
 		accountRepository.save(account);
 	}
 
-	@Override
-	public UserDto userLogin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public UserDto deleteUser(String user) {
@@ -92,6 +89,18 @@ public class AccountServiceImpl implements AccountService {
 	public UserDto getUser(String user) {
 		Account account = accountRepository.findById(user).orElseThrow(AccountNotException::new);
 		return modelMapper.map(account, UserDto.class);
+	}
+	
+	@Override
+	public void run(String... args) throws Exception {
+		if (!accountRepository.existsById("admin")) {
+			String password = BCrypt.hashpw("admin", BCrypt.gensalt());
+			Account userAccount =  new Account("admin", "", "", password);
+			userAccount.addRole("MODERATOR");
+			userAccount.addRole("ADMINISTRATOR");
+			accountRepository.save(userAccount);
+		}
+
 	}
 
 }
