@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import telran.java51.account.dao.AccountRepository;
 import telran.java51.account.model.Account;
+import telran.java51.security.model.User;
 
 
 @Component
@@ -51,7 +52,10 @@ public class AuthenticationFilter implements Filter {
 				response.sendError(401);
 				return;
 			}
-			request = new WrappedRequest(request, account.getLogin());
+		//	Set <String> roles = user.getRoles().stream().map(r -> r.name()).collect(Collectors.toSet()); для ename
+		//	request = new WrappedRequest(request, account.getLogin(), roles);
+			
+			request = new WrappedRequest(request, account.getLogin(), account.getRoles());
 		}
 		
 		chain.doFilter(request, response);
@@ -73,18 +77,17 @@ public class AuthenticationFilter implements Filter {
 
 	private class WrappedRequest extends HttpServletRequestWrapper {
 		private String login;
-		//private Set<String> roles;
+		private Set<String> roles;
 
-		public WrappedRequest(HttpServletRequest request, String login  //, Set<String> roles
-				) {
+		public WrappedRequest(HttpServletRequest request, String login  , Set<String> roles) {
 			super(request);
 			this.login = login;
-			//this.roles = roles;
+			this.roles = roles;
 		}
 
 		@Override
 		public Principal getUserPrincipal() {
-			return ()-> login;
+			return new User(login, roles);
 		}
 
 	}

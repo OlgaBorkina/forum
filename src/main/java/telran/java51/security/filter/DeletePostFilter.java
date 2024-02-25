@@ -19,6 +19,7 @@ import telran.java51.account.dao.AccountRepository;
 import telran.java51.account.model.Account;
 import telran.java51.post.dao.PostRepository;
 import telran.java51.post.model.Post;
+import telran.java51.security.model.User;
 
 @Component
 @RequiredArgsConstructor
@@ -35,14 +36,14 @@ public class DeletePostFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		
 		if (checkEndPoint(request.getMethod(), request.getServletPath())) {
-			Principal principal = request.getUserPrincipal();
+			User user = (User) request.getUserPrincipal();
 			String[] arr = request.getServletPath().split("/");
 			String idPost = arr[arr.length - 1];
 			
-			Account accPricipal = accountRepository.findById(principal.getName()).get();
+	
 			Post post = postRepository.findById(idPost).orElseThrow(RuntimeException::new);
-					if ( !(principal.getName().equals(post.getAuthor())
-					|| accPricipal.getRoles().contains("MODERATOR"))){
+					if ( !(user.getName().equals(post.getAuthor())
+					|| user.getRoles().contains("MODERATOR"))){
 				response.sendError(403);
 				return;
 			}
