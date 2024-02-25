@@ -28,7 +28,7 @@ public class Account {
 	@Setter
 	String password;
 	@Singular
-	Set<String> roles  = new HashSet<>();
+	Set<Role> roles  = new HashSet<>();
 	
 	
 	public Account(String login, String firstName, String lastName, Set<String> roles) {
@@ -40,7 +40,7 @@ public class Account {
 	}
 	
 	public boolean addRole(String role) {
-		return roles.add(role);
+		return roles.add(Role.valueOf(role.toUpperCase()));
 	}
 	public boolean removeRole(String role) {
 		return roles.remove(role);
