@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
-import telran.java51.security.filter.enums.Role;
+
 
 
 @Getter
@@ -43,7 +43,7 @@ public class Account {
 		return roles.add(Role.valueOf(role.toUpperCase()));
 	}
 	public boolean removeRole(String role) {
-		return roles.remove(role);
+		return roles.remove(Role.valueOf(role.toUpperCase()));
 	}
 
 	public Account(String login, String firstName, String lastName, String password) {

@@ -2,9 +2,10 @@ package telran.java51.account.service;
 
 import java.util.Optional;
 
-import org.mindrot.jbcrypt.BCrypt;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import telran.java51.account.dto.UserRegisterDto;
 import telran.java51.account.dto.exception.AccountNotException;
 import telran.java51.account.dto.exception.AlreadyExists;
 import telran.java51.account.model.Account;
-import telran.java51.security.filter.enums.Role;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class AccountServiceImpl implements AccountService, CommandLineRunner {
 
 	final AccountRepository accountRepository;
 	final ModelMapper modelMapper;
+	final PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDto userRegister(UserRegisterDto userRegisterDto) {
@@ -33,7 +35,7 @@ public class AccountServiceImpl implements AccountService, CommandLineRunner {
 		}
 
 		Account account = modelMapper.map(userRegisterDto, Account.class);
-		String password = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
+		String password = passwordEncoder.encode(userRegisterDto.getPassword());
 		account.setPassword(password);
 		account.addRole("USER");
 		account = accountRepository.save(account);
@@ -43,7 +45,7 @@ public class AccountServiceImpl implements AccountService, CommandLineRunner {
 	@Override
 	public void changePassword(String login, String newPassword) {
 		Account account = accountRepository.findById(login).orElseThrow(AccountNotException::new);
-		String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		String password = passwordEncoder.encode(newPassword);
 		account.setPassword(password);
 		accountRepository.save(account);
 	}
@@ -95,7 +97,7 @@ public class AccountServiceImpl implements AccountService, CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		if (!accountRepository.existsById("admin")) {
-			String password = BCrypt.hashpw("admin", BCrypt.gensalt());
+			String password = passwordEncoder.encode("admin");
 			Account userAccount =  new Account("admin", "", "", password);
 			userAccount.addRole("MODERATOR");
 			userAccount.addRole("ADMINISTRATOR");
