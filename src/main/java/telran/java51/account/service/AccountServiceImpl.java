@@ -60,6 +60,7 @@ public class AccountServiceImpl implements AccountService, CommandLineRunner {
 	}
 
 	@Override
+	
 	public UserDto userUpdate(String user, UpdateUserDto updateUserDto) {
 		Account account = accountRepository.findById(user).orElseThrow(AccountNotException::new);
 		if (updateUserDto.getFirstName() != null) {
